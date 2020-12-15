@@ -2,8 +2,8 @@ package Main;
 
 import java.awt.*;
 
-public interface Pole extends Shape{
+public interface Land extends Shape{
 	void set_color (Color color);
 	Color getcolor();
-	//boolean isHIt(Point starDrag);
+	boolean isHIt(Point starDrag);
 }

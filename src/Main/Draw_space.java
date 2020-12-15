@@ -2,36 +2,36 @@ package Main;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 public class Draw_space extends JPanel {
-	private Pole[][] shapes = new Pole[17][13];
+	private final Land[][] shapes;
+	private SetBoardShape setBoardShape = new SetBoardShape();
+	ArrayList<int[]> createTables;
+	ArrayList<Integer> Movements=new ArrayList<>();
+	int[] tablica;
+	int number=0;
+	Point point;
+	int sizeOfFieldComamnds;
 	
-	
-	private final int[] domek = {0, 1, 2, 3};
-	
-	
-	public Draw_space(int width, int height) {
+	public Draw_space(Land[][] fields, ArrayList<int[]> domki) {
+		this.addMouseListener(new MymouseAdapter());
 		
-		add();
+		this.shapes = fields;
+		createTables = setBoardShape.returnBoardShape("star").returnTables();
+		sizeOfFieldComamnds = createTables.size();
+		System.out.println(sizeOfFieldComamnds);
+		createTables.addAll(domki);
+		
 	}
-	
-	/*
-	 * W funkcji paintComponent wywoluje funkcje drawing
-	 * ktora sluzy do narysowania figury wybranej przez uzytkownika
-	 * zapisania jej i pokazania jej na panelu
-	 */
 	
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		drawing(g);
 	}
 	
-	private Pole dodaj_punkt(float x, float y, float x1, float y1) {
-		return new punkt(x, y, x1, y1);
-	}
 	
 	private void drawing(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
@@ -40,127 +40,77 @@ public class Draw_space extends JPanel {
 		
 		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.50f));
 		
-		for (int i = 0; i < 13; i++) {
-			for (int j = 6; j <= 6 + Math.round((float) i / 2); j++) {
-				{
-					if(i<4) shapes[i][j].set_color(Color.BLUE);
-					if(i%2 ==0 && j>9  && i>8 ) shapes[i][j].set_color(Color.YELLOW);
-					if(i%2!=0 && j>9  && i>9 ) shapes[i][j].set_color(Color.YELLOW);
-					if(i==12 && j==9)  shapes[i][j].set_color(Color.YELLOW);
-					else if(i==9 && j==11) shapes[i][j].set_color(Color.YELLOW);
+		for (int j = 0; j < createTables.size(); j++) {
+			tablica = createTables.get(j);
+			
+			if (tablica[0] == 1 || tablica[0] == -1) {
+				for (int h = 3; h <= tablica.length - 1; h = h + 2) {
+					for (int i = tablica[h]; i < tablica[2]; i++) {
+						if(j>sizeOfFieldComamnds-1 && number<1){
+							System.out.println("Help2");
+							shapes[i][tablica[h + 1]].set_color(Color.cyan);
+						}
+						g2.setPaint(shapes[i][tablica[h + 1]].getcolor());
+						g2.fill(shapes[i][tablica[h + 1]]);
+						g2.setPaint(Color.RED);
+						g2.draw(shapes[i][tablica[h + 1]]);
+					}
 					
-					g2.setPaint(shapes[i][j].getcolor());
-					g2.fill(shapes[i][j]);
-					g2.setPaint(Color.BLACK);
-					g2.draw(shapes[i][j]);
 				}
-			}
-			for (int y = 5; y > 5 - Math.floor((float) i / 2); y--) {
-				if(i<4) shapes[i][y].set_color(Color.BLUE);
-				if(i%2 ==0 && y<3  && i>=10 ) shapes[i][y].set_color(Color.CYAN);
-				if(i%2!=0 && y<4 && i>=10 ) shapes[i][y].set_color(Color.CYAN);
-				if(i==12 && y==3)  shapes[i][y].set_color(Color.CYAN);
-				else if(i==9 && y==2) shapes[i][y].set_color(Color.CYAN);
-				g2.setPaint(shapes[i][y].getcolor());
-				g2.fill(shapes[i][y]);
-				g2.setPaint(Color.BLACK);
-				g2.draw(shapes[i][y]);
+			} else {
+				for (int h = 3; h <= tablica.length - 1; h = h + 2) {
+					for (int i = tablica[h]; i >= tablica[2]; i--) {
+						
+						if(j>sizeOfFieldComamnds-1 && number<1){
+							System.out.println("Help");
+							shapes[i][tablica[h + 1]].set_color(Color.cyan);
+						}
+						
+						g2.setPaint(shapes[i][tablica[h + 1]].getcolor());
+						g2.fill(shapes[i][tablica[h + 1]]);
+						g2.setPaint(Color.RED);
+						g2.draw(shapes[i][tablica[h + 1]]);
+					}
+				}
 			}
 		}
-		
-		for (int i = 4; i < 8; i++) {
-			for (int j = 0; j < 8 - i; j++) {
-				if (i <= 4) {
-					shapes[i][j].set_color(Color.RED);
-					g2.setPaint(shapes[i][j].getcolor());
-					g2.fill(shapes[i][j]);
-					g2.setPaint(Color.RED);
-					g2.draw(shapes[i][j]);
-				} else if (i == 7) {
-					shapes[i][j + 2].set_color(Color.RED);
-					g2.setPaint(shapes[i][j + 2].getcolor());
-					g2.fill(shapes[i][j + 2]);
-					g2.setPaint(Color.RED);
-					g2.draw(shapes[i][j + 2]);
-				} else {
-					shapes[i][j + 1].set_color(Color.RED);
-					g2.setPaint(shapes[i][j + 1].getcolor());
-					g2.fill(shapes[i][j + 1]);
-					g2.setPaint(Color.RED);
-					g2.draw(shapes[i][j + 1]);
-				}
-			}
+		number++;
+	}
+	
+	class MymouseAdapter extends MouseAdapter {
+		public void mousePressed(MouseEvent e) {
+			point = new Point(e.getX(), e.getY());
 			
-			for (int h = 9; h < 17 - i; h++) {
-				if (i <= 4) {
-					shapes[i][h].set_color(Color.BLACK);
-					g2.setPaint(shapes[i][h].getcolor());
-					g2.fill(shapes[i][h]);
-					g2.setPaint(Color.BLACK);
-					g2.draw(shapes[i][h]);
-				} else if (i == 7) {
-					shapes[i][h + 2].set_color(Color.BLACK);
-					g2.setPaint(shapes[i][h + 2].getcolor());
-					g2.fill(shapes[i][h + 2]);
-					g2.setPaint(Color.BLACK);
-					g2.draw(shapes[i][h + 2]);
-				} else {
-					shapes[i][h + 1].set_color(Color.BLACK);
-					g2.setPaint(shapes[i][h + 1].getcolor());
-					g2.fill(shapes[i][h + 1]);
-					g2.setPaint(Color.BLACK);
-					g2.draw(shapes[i][h + 1]);
-				}
-			}
-			
+			for (int i = 0; i < shapes.length; i++) {
+				for(int j=0; j<shapes[i].length;j++)
+					if (shapes[i][j].isHIt(point)) {
+						Movements.add(i);
+						Movements.add(j);
+						if(Movements.size()==4){
+							changeColor();
+							break;
+						}
+						}
+					}
+			repaint();
 		}
-		
-		for (int j = 5; j < 9; j++) {
-			for( int i=13; i<=21-j;i++) {
-				if (i< 15) {
-				shapes[i][j].set_color(Color.GREEN);
-				g2.setPaint(shapes[i][j].getcolor());
-				g2.fill(shapes[i][j]);
-				g2.setPaint(Color.GREEN);
-				g2.draw(shapes[i][j]);
-				}
-				else {
-					shapes[i][j+1].set_color(Color.GREEN);
-					g2.setPaint(shapes[i][j+1].getcolor());
-					g2.fill(shapes[i][j+1]);
-					g2.setPaint(Color.GREEN);
-					g2.draw(shapes[i][j+1]);
-				}
-			}
-	}
-		
-		/*for(int i=0;i<shapes.length;i++)
-		{
-			for(int j=0; j<shapes[i].length;j++){
-				g2.setPaint(shapes[i][j].getcolor());
-				g2.fill(shapes[i][j]);
-				g2.setPaint(Color.PINK);
-				g2.draw(shapes[i][j]);
-			}
+		public void changeColor(){
+			int oldX,oldY,newX,newY;
+			Color temporary;
 			
-			}*/
-	
-	//if (startDrag != null && endDrag != null)
-	//{
-	//g2.setPaint(Color.LIGHT_GRAY);
-	//}
-	
-	}
-		
-	private void add(){
-		for(int i=0;i<shapes.length;i++)
-		{
-			for(int j=0; j<shapes[i].length;j++){
-				
-				 if((i+1)%2==0)shapes [i][j] = dodaj_punkt( 10+ j*40, 20+ i*30, (float) 20, (float) 20);
-				 else shapes[i][j] = dodaj_punkt( 30+ j*40, 20+ i*30, (float) 20, (float) 20);
-			}
+			oldY=Movements.get(0);
+			oldX=Movements.get(1);
+			newY=Movements.get(2);
+			newX=Movements.get(3);
+			
+			temporary=shapes[oldY][oldX].getcolor();
+			shapes[oldY][oldX].set_color(Color.white);
+			shapes[newY][newX].set_color(temporary);
+			
+			Movements.clear();
 		}
 	}
-	
 }
+	
+	
+

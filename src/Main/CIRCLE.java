@@ -3,11 +3,11 @@ package Main;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
-public class punkt extends Ellipse2D.Float implements Pole
+public class CIRCLE extends Ellipse2D.Float implements Land
 {
 	Color mycolor = Color.WHITE;
 	
-	public punkt(float x, float y , float x1, float y1)
+	public CIRCLE(float x, float y , float x1, float y1)
 	{
 			this.x=x;
 			this.y=y;
@@ -16,11 +16,11 @@ public class punkt extends Ellipse2D.Float implements Pole
 		
 	}
 	
-	/*@Override
+	@Override
 	public boolean isHIt(Point dragStart)
 	{
 		return this.contains(dragStart);
-	}*/
+	}
 	
 	@Override
 	public void set_color(Color color) {
