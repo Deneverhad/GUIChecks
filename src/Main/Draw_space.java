@@ -60,7 +60,7 @@ public class Draw_space extends JPanel {
 			} else {
 				for (int h = 3; h <= tablica.length - 1; h = h + 2) {
 					for (int i = tablica[h]; i >= tablica[2]; i--) {
-						
+						//PORAW
 						if(j>sizeOfFieldComamnds-1 && number<1){
 							System.out.println("Help");
 							shapes[i][tablica[h + 1]].set_color(Color.cyan);
@@ -86,6 +86,7 @@ public class Draw_space extends JPanel {
 					if (shapes[i][j].isHIt(point)) {
 						Movements.add(i);
 						Movements.add(j);
+						
 						if(Movements.size()==4){
 							changeColor();
 							break;
@@ -102,7 +103,7 @@ public class Draw_space extends JPanel {
 			oldX=Movements.get(1);
 			newY=Movements.get(2);
 			newX=Movements.get(3);
-			
+			//dodaj
 			temporary=shapes[oldY][oldX].getcolor();
 			shapes[oldY][oldX].set_color(Color.white);
 			shapes[newY][newX].set_color(temporary);
