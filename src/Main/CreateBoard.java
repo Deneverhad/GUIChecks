@@ -2,14 +2,14 @@ package Main;
 
 public class CreateBoard {
 	
-	BoardMethods BoardPropetis(String name, int X, int Y){
+	 static BoardMethods BoardPropetis(String name){
 		
 		if(name.equals("Classical")){
-			return new Classical(X,Y);
+			return new Classical(13,17);
 		}
 		
 		else if( name.equals("Square")){
-			return new RectangleBoard(X,Y);
+			return new RectangleBoard(10,10);
 		}
 		else {
 			throw new IllegalArgumentException("Unknown board " + name);
